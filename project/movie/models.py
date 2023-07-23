@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 # Create your models here.
 def image_upload_path(instance, filename):
@@ -15,11 +16,12 @@ class Movie(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     tag = models.ManyToManyField(Tag, blank=True)
     image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
+    num = models.PositiveSmallIntegerField(default=0)
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     movie = models.ForeignKey(Movie, blank=False, null=False, on_delete=models.CASCADE, related_name='comments')
-    writer = models.CharField(max_length=50)
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
